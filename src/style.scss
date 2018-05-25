@@ -29,11 +29,37 @@ body, html {
   width: 200px;
   height: 200px;
   background-color: white;
-  color: white;
   border-color: black;
   border-width: 10px;
 }
 
+.editing-card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  margin: 10px;
+  width: 300px;
+  height: 300px;
+  background-color: white;
+  border-color: black;
+  border-width: 10px;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.editing-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .container {
   padding: 2px 16px;
+}
+
+.delete-icon {
+  width: 5px;
+  height: 5px;
 }
