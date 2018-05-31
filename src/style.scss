@@ -31,6 +31,7 @@ body, html {
   background-color: white;
   border-color: black;
   border-width: 10px;
+  position: absolute;
 }
 
 .editing-card {
@@ -47,6 +48,8 @@ body, html {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding-top: 8px;
+  padding-left: 5px;
 }
 
 .editing-title-container {
@@ -59,7 +62,24 @@ body, html {
   padding: 2px 16px;
 }
 
+.edit-button {
+  padding-top: 8px;
+  width: 40px;
+  height: 30px;
+  background-color: Transparent;
+  border-style: solid;
+  border-radius: 3px;
+}
+
 .delete-icon {
-  width: 5px;
-  height: 5px;
+  width: 20px;
+  height: 20px;
+  padding-top: 8px;
+}
+
+.note-mover {
+  width: 20px;
+  height: 20px;
+  padding-right: 8px;
+  padding-top: 8px;
 }

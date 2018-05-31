@@ -6,8 +6,8 @@ import ReactDOM from 'react-dom';
 import Immutable from 'immutable';
 import Draggable from 'react-draggable/';
 import CreateNote from './components/create_note';
-// import NotesList from './components/notes_list';
 import Note from './components/note';
+import * as db from './services/datastore';
 import './style.scss';
 
 class App extends Component {
@@ -31,6 +31,14 @@ class App extends Component {
     this.update_note = this.update_note.bind(this);
     this.render_notes = this.render_notes.bind(this);
   }
+
+  componentDidMount() {
+    const callback = (notes) => {
+      this.setState({ notes: Immutable.Map(notes) });
+    };
+    db.fetchNotes(callback);
+  }
+
   // function for additional note
   new_note = (title) => {
     const note = {
@@ -40,30 +48,39 @@ class App extends Component {
       y: 12,
       zIndex: 26,
     };
+    /*
     this.setState({
       notes: this.state.notes.set(this.state.id, note),
       id: this.state.id += 1,
 
     });
+    */
+    db.createNewNote(note);
   }
   // function to delete note
   delete_note = (id) => {
+    /*
     this.setState({
       notes: this.state.notes.delete(id),
     });
+    */
+    db.removeNote(id);
   }
 
   // function to update note
   update_note = (id, fields) => {
+    /*
     this.setState({
       notes: this.state.notes.update(id, (n) => { return Object.assign({}, n, fields); }),
     });
+    */
+    db.updateNote(id, fields);
   }
     render_notes() {
       console.log(this.state.notes);
       return this.state.notes.entrySeq().map(([id, note]) => {
         return (
-          <Note id={id} note={note} delete_note={this.delete_note} update_note={this.update_note} />
+          <Note id={id} key={id} note={note} delete_note={this.delete_note} update_note={this.update_note} />
         );
       });
     }

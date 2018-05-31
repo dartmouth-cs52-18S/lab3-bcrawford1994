@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import Textarea from 'react-textarea-autosize';
 import marked from 'marked';
+import { Button } from '@material-ui/core';
 import Draggable from 'react-draggable/';
+import * as db from '../services/datastore';
 
 class Note extends Component {
   constructor(props) {
@@ -12,15 +14,21 @@ class Note extends Component {
       isEditing: false,
       x: null,
       y: null,
-      // position: {
-        // x: 0, y: 0
-      // },
+      width: null,
+      height: null,
     };
 
     this.delete = this.delete.bind(this);
     this.update = this.update.bind(this);
+    this.editingUpdate = this.editingUpdate.bind(this);
     this.renderSomeSection = this.renderSomeSection.bind(this);
     this.onDrag = this.onDrag.bind(this);
+    // this.changeEditing = this.changeEditing.bind(this);
+  }
+
+  onDrag = (e, ui) => {
+    // this.setState({ x: ui.x, y: ui.x });
+    this.props.update_note(this.props.id, { x: ui.x, y: ui.y });
   }
 
   delete(event) {
@@ -32,52 +40,49 @@ class Note extends Component {
   }
 
   editingUpdate(event) {
-    this.props.update_note(this.props.id, {title: event.target.value })
-  }
-
-  onDrag = (e, ui) => {
-    this.setState({ x: ui.x }, { y: ui.x });
-    this.props.update_note(this.props.id, { x: this.state.x }, { y: this.state.y });
+    this.props.update_note(this.props.id, { title: event.target.value });
   }
 
   renderSomeSection() {
     if (this.state.isEditing) {
       return (
-          <div className="editing-card">
-            <div className="editing-title-container">
-              <input onChange={this.update} value={this.props.note.text} placeholder="Title" />
-              <button onClick={this.state.isEditing=false}>
+        <div className="editing-card">
+          <div className="editing-title-container">
+            <input onChange={this.editingUpdate} value={this.props.note.title} placeholder="Title" />
+            <button onClick={() => this.setState({ isEditing: false })}>
                 Done
-                </button>
-            </div>
-            <div className="noteBody" dangerouslySetInnerHTML={{ __html: marked(this.props.note.text || '') }}>
-              <Textarea onChange={this.update} value={this.props.note.text} />
-            </div>
+            </button>
           </div>
+          <div>
+            <Textarea onChange={this.update} value={this.props.note.text} />
+          </div>
+        </div>
       );
       } else {
           return (
             <Draggable
               handle=".note-mover"
               grid={[25, 25]}
-              defaultPosition={ {x: 20, y: 20} }
-              position={position}
-              // onStart={this.onStartDrag}
+              defaultPosition={{ x: 20, y: 20 }}
+              position={{
+                x: this.props.note.x,
+                y: this.props.note.y,
+              }}
               onDrag={this.onDrag}
-              // onStop={this.onStopDrag}
             >
               <div className="card">
                 <div className="title-container">
                   {this.props.note.title}
-                  <button onClick={this.state.isEditing=true}>
-                    Edit Note
+                  <button className="edit-button" onClick={() => this.setState({ isEditing: true })}>
+                    Edit
                   </button>
-                  <button onClick={this.delete}>
-                    Delete Note
-                  </button>
+                  <img className="delete-icon" src="https://maxcdn.icons8.com/Share/icon/p1em/Editing//trash1600.png" onClick={this.delete} />
+                  <div>
+                    <img className="note-mover" src="https://d30y9cdsu7xlg0.cloudfront.net/png/2862-200.png" />
+                  </div>
                 </div>
                 <div className="container">
-                  <Textarea onChange={this.update} value={this.props.note.text} />
+                  <div className="noteBody" dangerouslySetInnerHTML={{ __html: marked(this.props.note.text || '') }} />
                 </div>
               </div>
             </Draggable>
@@ -94,27 +99,9 @@ class Note extends Component {
   }
 }
 
-  // render a note
-  /*
-  render() {
-    return (
-      <div className="card">
-        <div className="title-container">
-          {this.props.note.title}
-          <button onClick={this.delete}>
-            Delete Note
-          </button>
-        </div>
-        <div className="container">
-          <Textarea onChange={this.update} value={this.props.note.text} />
-        </div>
-      </div>
-    );
-  }
-}
-*/
 
 export default Note;
-// <img className="delete-icon" src="http://cdn.onlinewebfonts.com/svg/img_529017.png" />
-// <p className="note-content">this.state.title</p>
-// value={this.state.text}
+// <button onClick={this.delete}>
+  // Delete
+// </button>
+// <Button variant="raised" color="primary" className="edit-button" onClick={() => this.setState({ isEditing: true })}>Edit</Button>

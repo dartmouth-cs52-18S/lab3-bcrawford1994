@@ -40,6 +40,7 @@
         "no-trailing-spaces": 0,
         "react/prefer-stateless-function": 0,
         "indent": 0,
+        "jsx-a11y/alt-text": 0,
         "no-shadow": 0
     },
         "plugins": [
